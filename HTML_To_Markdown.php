@@ -219,19 +219,11 @@ class HTML_To_Markdown
                 break;
             case "h1":
             case "h2":
-                $markdown = $this->convert_header($tag, $node);
-                break;
             case "h3":
-                $markdown = "### " . $value . PHP_EOL . PHP_EOL;
-                break;
             case "h4":
-                $markdown = "#### " . $value . PHP_EOL . PHP_EOL;
-                break;
             case "h5":
-                $markdown = "##### " . $value . PHP_EOL . PHP_EOL;
-                break;
             case "h6":
-                $markdown = "###### " . $value . PHP_EOL . PHP_EOL;
+                $markdown = $this->convert_header($tag, $node);
                 break;
             case "em":
             case "i":
@@ -297,6 +289,10 @@ class HTML_To_Markdown
      * Returns atx headers instead if $this->options['header_style'] is "atx"
      *
      * e.g.    # Header 1   ## Header Two
+	 *
+     * Returns postmatic headers instead if $this->options['header_style'] is "postmatic"
+     *
+     * e.g.    »»» Header 1 «««   »» Header Two ««
      *
      * @param string $level The header level, including the "h". e.g. h1
      * @param string $node The node to convert.
@@ -305,13 +301,17 @@ class HTML_To_Markdown
     private function convert_header($level, $node)
     {
         $content = $node->nodeValue;
+		$level = intval( substr( $level, 1 ) );
 
-        if (!$this->is_child_of('blockquote', $node) && $this->options['header_style'] == "setext") {
+        if (!$this->is_child_of('blockquote', $node) && $this->options['header_style'] == "setext" && $level < 3) {
             $length = (function_exists('mb_strlen')) ? mb_strlen($content, 'utf-8') : strlen($content);
-            $underline = ($level == "h1") ? "=" : "-";
+            $underline = ($level == "1") ? "=" : "-";
             $markdown = $content . PHP_EOL . str_repeat($underline, $length) . PHP_EOL . PHP_EOL; // setext style
+		} else if ( $this->options['header_style'] == "postmatic" ) {
+			$n = ( $level == 1 ) ? 3 : ( ( $level == 2 ) ? 2 : 1 );
+			$markdown = str_repeat( "»", $n ) . " " . $content . " " . str_repeat( "«", $n ). PHP_EOL . PHP_EOL;
         } else {
-            $prefix = ($level == "h1") ? "# " : "## ";
+            $prefix = str_repeat( "#", $level ) . " ";
             $markdown = $prefix . $content . PHP_EOL . PHP_EOL; // atx style
         }
 

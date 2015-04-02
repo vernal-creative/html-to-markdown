@@ -32,6 +32,10 @@ class HTML_To_MarkdownTest extends PHPUnit_Framework_TestCase
         $this->html_gives_markdown("<h4>Test</h4>", "#### Test");
         $this->html_gives_markdown("<h5>Test</h5>", "##### Test");
         $this->html_gives_markdown("<h6>Test</h6>", "###### Test");
+        $this->html_gives_markdown("<h1>Test</h1>", "»»» Test «««", array( 'header_style' => 'postmatic' ) );
+        $this->html_gives_markdown("<h2>Test</h2>", "»» Test ««", array( 'header_style' => 'postmatic' ) );
+        $this->html_gives_markdown("<h3>Test</h3>", "» Test «", array( 'header_style' => 'postmatic' ) );
+        $this->html_gives_markdown("<h4>Test</h4>", "» Test «", array( 'header_style' => 'postmatic' ) );
     }
 
     public function test_spans()
