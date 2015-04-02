@@ -1,5 +1,5 @@
 {
-    "name": "nickcernis/html-to-markdown",
+    "name": "vernal-creative/html-to-markdown",
     "type": "library",
     "description": "An HTML-to-markdown conversion helper for PHP",
     "keywords": ["markdown", "html"],
@@ -16,7 +16,7 @@
         "classmap": [ "HTML_To_Markdown.php" ]
     },
     "require": {
-        "php": ">=5.3"
+        "php": ">=5.2"
     },
     "require-dev": {
         "php": ">=5.3.3",
